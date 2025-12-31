@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GDG Emergency Calling System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+            width: 100%;
+            padding: 40px;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            color: #333;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .emergency-btn {
+            width: 100%;
+            padding: 20px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(245, 87, 108, 0.3);
+        }
+
+        .emergency-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(245, 87, 108, 0.4);
+        }
+
+        .emergency-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="number"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+            font-family: inherit;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .location-info {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-size: 13px;
+            color: #666;
+        }
+
+        .location-info p {
+            margin: 5px 0;
+        }
+
+        .button-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        button {
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #e0e0e0;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #d0d0d0;
+        }
+
+        .status-message {
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            text-align: center;
+            font-weight: 600;
+            display: none;
+        }
+
+        .status-message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .status-message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .status-message.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        .record-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            background: #f5576c;
+            border-radius: 50%;
+            margin-right: 8px;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        .offline-mode {
+            background: #fff3cd;
+            color: #856404;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #ffc107;
+        }
+
+        .feature-list {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .feature-item {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .feature-icon {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .feature-item p {
+            font-size: 12px;
+            color: #666;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚨 Emergency Calling System</h1>
+            <p>Fast, Reliable Emergency Response with Location Tracking</p>
+        </div>
+
+        <button class="emergency-btn" onclick="triggerEmergency()">EMERGENCY CALL (SOS)</button>
+
+        <div id="offlineMode" class="offline-mode" style="display: none;">
+            📡 Operating in Offline Mode - Data will sync when online
+        </div>
+
+        <form id="emergencyForm">
+            <div class="form-group">
+                <label for="name">Your Name</label>
+                <input type="text" id="name" name="name" placeholder="Enter your full name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Phone Number</label>
+                <input type="tel" id="phone" name="phone" placeholder="Enter emergency contact number" required>
+            </div>
+
+            <div class="form-group">
+                <label for="emergencyType">Emergency Type</label>
+                <select id="emergencyType" name="emergencyType" required>
+                    <option value="">Select emergency type...</option>
+                    <option value="medical">Medical Emergency</option>
+                    <option value="fire">Fire</option>
+                    <option value="accident">Accident</option>
+                    <option value="crime">Crime/Violence</option>
+                    <option value="disaster">Natural Disaster</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea id="description" name="description" placeholder="Describe the emergency situation..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Current Location</label>
+                <button type="button" onclick="getLocation()" class="btn-primary" style="width: 100%; margin-bottom: 10px;">📍 Get My Location</button>
+                <div id="locationInfo" class="location-info" style="display: none;">
+                    <p><strong>Latitude:</strong> <span id="latitude">-</span></p>
+                    <p><strong>Longitude:</strong> <span id="longitude">-</span></p>
+                    <p><strong>Address:</strong> <span id="address">Loading...</span></p>
+                    <p><strong>Accuracy:</strong> <span id="accuracy">-</span></p>
+                </div>
+            </div>
+
+            <div class="button-group">
+                <button type="button" class="btn-primary" onclick="startRecording()">🎙️ Start Recording</button>
+                <button type="button" class="btn-secondary" onclick="stopRecording()">⏹️ Stop Recording</button>
+            </div>
+
+            <div id="recordingStatus" style="display: none; margin-top: 10px; padding: 10px; background: #ffe0e0; border-radius: 8px; text-align: center;">
+                <span class="record-indicator"></span>
+                <span id="recordingText">Recording in progress...</span>
+            </div>
+
+            <div class="button-group" style="margin-top: 20px;">
+                <button type="submit" class="btn-primary">📞 Make Emergency Call</button>
+                <button type="button" class="btn-secondary" onclick="resetForm()">Clear Form</button>
+            </div>
+        </form>
+
+        <div id="statusMessage" class="status-message"></div>
+
+        <div class="feature-list">
+            <div class="feature-item">
+                <div class="feature-icon">📍</div>
+                <p>Real-time Location Tracking</p>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon">🎙️</div>
+                <p>Call Recording for Security</p>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon">📡</div>
+                <p>Offline & Online Support</p>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon">⚡</div>
+                <p>Instant Emergency Response</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
